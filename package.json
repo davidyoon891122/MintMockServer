@@ -2,14 +2,16 @@
   "name": "stockserver",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "local": "PORT=3000 node index.js",
     "start": "node index.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Davidyoon",
+  "license": "MIT",
   "dependencies": {
     "express": "^4.17.3"
   },
