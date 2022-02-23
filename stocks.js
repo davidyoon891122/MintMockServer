@@ -48,8 +48,8 @@ export function createMyStockLists(count) {
     let list = []
     Array.from(Array(count).keys())
     .forEach(element => {
-        const randomJson = getRandomJSON()
-        list.push(randomJson);
+        const randomJSON = getRandomMyStockJSON()
+        list.push(randomJSON);
     });
     console.log(list)
     return list
@@ -69,6 +69,17 @@ export function createMyProfit() {
     return list
 }
 
+export function createDividendStockList(count) {
+    let list = []
+    Array.from(Array(count).keys())
+    .forEach(element => {
+        const randomJSON = getRandomDividendStockJSON()
+        list.push(randomJSON);
+    });
+    console.log(list)
+    return list
+}
+
 
 
 function getRandomNumber(min, max, isInt) {
@@ -78,7 +89,7 @@ function getRandomNumber(min, max, isInt) {
     return Math.random() * (max - min) + min;
 }
 
-function getRandomJSON() {
+function getRandomMyStockJSON() {
     let jsonFormat = {
         "stockName": "AT&T",
         "currentPrice": 2150,
@@ -94,6 +105,24 @@ function getRandomJSON() {
     jsonFormat.valueChange = getRandomNumber(0, 10000, true);
     jsonFormat.percentChange = getRandomNumber(0, 30, false);
     jsonFormat.imageURL = stockImageURL[jsonFormat.stockName];
+
+    return jsonFormat
+}
+
+function getRandomDividendStockJSON() {
+    let jsonFormat = {
+        "stockName": "AT&T",
+        "currentPrice": 2150,
+        "percentChange": 7.82,
+        "imageURL": "",
+        "exDividendDate": "2월 28일",
+    }
+
+    jsonFormat.stockName = stocks[Math.floor(Math.random() * stocks.length)]
+    jsonFormat.currentPrice = getRandomNumber(0, 30000, true);
+    jsonFormat.percentChange = getRandomNumber(0, 30, false);
+    jsonFormat.imageURL = stockImageURL[jsonFormat.stockName];
+    jsonFormat.exDividendDate = "2월 28일" 
 
     return jsonFormat
 }
