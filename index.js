@@ -1,6 +1,6 @@
 // simple-expressjs/index.js
 import express from "express"
-import { createDividendStockList, createMyProfit, createMyStockLists } from "./stocks.js"
+import { createDividendStockList, createIncreaseStockList, createMyProfit, createMyStockLists } from "./stocks.js"
 const app = express();
 const port = process.env.PORT;
 
@@ -23,6 +23,10 @@ app.get("/dividend-list", (req, res) => {
   res.status(200).json(myDividendsJSON);
 })
 
+app.get("/increase-list", (req, res) => {
+  const myIncreaseStocksJSON = createIncreaseStockList(10);
+  res.status(200).json(myIncreaseStocksJSON)
+})
 
 app.listen(port, () => {
   console.log('Server is running', port);
