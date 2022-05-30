@@ -1,8 +1,6 @@
-import { json } from "express";
+const { stocks, stockImageURL } = require("./stockInfo.js")
 
-import { stocks, stockImageURL } from "./stockInfo.js"
-
-export function createMyStockLists(count) {
+function createMyStockLists(count) {
     let list = []
     Array.from(Array(count).keys())
     .forEach(element => {
@@ -13,7 +11,7 @@ export function createMyStockLists(count) {
     return list
 }
 
-export function createMyProfit() {
+function createMyProfit() {
     let list = []
     let jsonFormat = {
         "userName": "관리자",
@@ -27,7 +25,7 @@ export function createMyProfit() {
     return list
 }
 
-export function createDividendStockList(count) {
+function createDividendStockList(count) {
     let list = []
     Array.from(Array(count).keys())
     .forEach(element => {
@@ -38,7 +36,7 @@ export function createDividendStockList(count) {
     return list
 }
 
-export function createIncreaseStockList(count) {
+function createIncreaseStockList(count) {
     let list = []
     Array.from(Array(count).keys())
     .forEach(element => {
@@ -110,4 +108,11 @@ function getRandomIncreaseStockJSON() {
     jsonFormat.imageURL = stockImageURL[jsonFormat.stockName];
 
     return jsonFormat
+}
+
+module.exports = {
+    createMyStockLists,
+    createMyProfit,
+    createDividendStockList,
+    createIncreaseStockList
 }

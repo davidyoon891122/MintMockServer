@@ -1,6 +1,4 @@
-
-
-export const stocks = [
+const stocks = [
     "AT&T", "유아이패스", "애플", "테슬라", "슐럼버거" ,"소파이 테크놀로지", "루시드 그룹", "필립스 66", "파이오니어 내츄럴 리소스",
      "AMD", "ASML", "AstraZeneca ADR", "Constellation Energy", "CSX", "KLA", "달러트리", "넷이즈",
      "넷플릭스", "데이터도그", "도큐사인", "램리서치", "루시드", "룰루레몬", "마벨 테크놀러지",
@@ -8,7 +6,7 @@ export const stocks = [
     
     ]
 
-export const stockImageURL = {
+const stockImageURL = {
     "AT&T": "https://gateway.foresee.com/sites/att/production/trigger/sitelogo_m.png",
     "유아이패스": "https://static.inews24.com/v1/587cc1a4ebbe48.jpg",
     "애플": "https://www.apple.com/ac/structured-data/images/knowledge_graph_logo.png?201812022340",
@@ -41,4 +39,9 @@ export const stockImageURL = {
     "메타": "https://file.mk.co.kr/meet/yonhap/2021/10/29/image_readtop_2021_1024237_0_073011.jpg",
     "모더나": "https://img.etoday.co.kr/pto_db/2020/05/20200518225955_1461463_419_267.jpg",
 
+}
+
+module.exports = {
+    stocks,
+    stockImageURL
 }

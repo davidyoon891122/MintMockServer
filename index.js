@@ -1,6 +1,7 @@
 // simple-expressjs/index.js
-import express from "express"
-import { createDividendStockList, createIncreaseStockList, createMyProfit, createMyStockLists } from "./stocks.js"
+const express = require('express')
+
+const { createDividendStockList, createIncreaseStockList, createMyProfit, createMyStockLists } = require("./stocks.js")
 const app = express();
 const port = process.env.PORT;
 
