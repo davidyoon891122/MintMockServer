@@ -6,7 +6,7 @@ const {
   createIncreaseStockList,
   createMyProfit,
   createMyStockLists,
-} = require('../stocks.js')
+} = require('./stocks.js')
 const app = express()
 const port = process.env.PORT
 
