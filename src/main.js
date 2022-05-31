@@ -1,7 +1,7 @@
 // simple-expressjs/index.js
 const express = require('express')
 
-const { createDividendStockList, createIncreaseStockList, createMyProfit, createMyStockLists } = require("./stocks.js")
+const { createDividendStockList, createIncreaseStockList, createMyProfit, createMyStockLists } = require("../stocks.js")
 const app = express();
 const port = process.env.PORT;
 
