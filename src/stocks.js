@@ -92,7 +92,7 @@ function getRandomIncreaseStockJSON() {
   let jsonFormat = {
     stockName: 'AT&T',
     stockCode: 'AAA',
-    'percentChange:': 4.34,
+    percentChange: 4.34,
     currentPrice: 2150,
     imageURL: '',
   }
