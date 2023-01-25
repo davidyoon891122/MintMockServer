@@ -1,9 +1,9 @@
 // @ts-check
 
-const app = require('./app')
+const server  = require('./app')
 
 const PORT = process.env.PORT
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`The Express server is listening at port: ${PORT}`)
 })
