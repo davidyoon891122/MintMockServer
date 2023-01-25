@@ -64,11 +64,15 @@ io.on('connection', (socket) => {
 sise.on('connection', (socket) => {
   console.log('Client has connected to sise namespace')
   let interval
+  let siseInterval
 
   socket.on('disconnect', () => {
     console.log('The client has disconnected')
     if (interval !== null) {
       clearInterval(interval)
+    }
+    if (siseInterval !== null) {
+      clearInterval(siseInterval)
     }
   })
 
@@ -76,6 +80,15 @@ sise.on('connection', (socket) => {
     console.log(`client request ${serviceName}..`)
     socket.emit("service", "This message is from sise server")
     interval = setInterval(() => {
+      console.log("sent sise")
+      socket.emit("sise", "10,000")
+    }, 1000)
+  })
+
+  socket.on('code', (codeName) => {
+    console.log(`client request ${codeName}..`)
+    socket.emit("service", `${codeName} sise has set!`)
+    siseInterval = setInterval(() => {
       console.log("sent sise")
       socket.emit("sise", "10,000")
     }, 1000)
