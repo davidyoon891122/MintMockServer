@@ -65,6 +65,52 @@ function createRandomPrice(code) {
   }
 }
 
+function createRandomPercent(code) {
+  if (code === 'Apple') {
+    return getRandomNumber(142.61, 200.0, true)
+  } else if (code === 'Tesla') {
+    return getRandomNumber(154.23, 200.0, true)
+  } else if (code === 'Amazone') {
+    return getRandomNumber(90.0, 200.0, true)
+  } else if (code === 'Microsoft') {
+    return getRandomNumber(241.67, 300.0, true)
+  } else if (code === 'Uber') {
+    return getRandomNumber(30.5, 50.0, true)
+  } else if (code === 'Meta') {
+    return getRandomNumber(142.35, 250.0, true)
+  } else {
+    return getRandomNumber(90.0, 200.0, true)
+  }
+}
+
+function createRandomprevPriceRate(code) {
+  if (code === 'Apple') {
+    return getRandomNumber(0.12, 10.0, true)
+  } else if (code === 'Tesla') {
+    return getRandomNumber(10.0, 30.0, true)
+  } else if (code === 'Amazone') {
+    return getRandomNumber(-30.0, 30.0, true)
+  } else if (code === 'Microsoft') {
+    return getRandomNumber(-30.67, 30.0, true)
+  } else if (code === 'Uber') {
+    return getRandomNumber(10.5, 30.0, true)
+  } else if (code === 'Meta') {
+    return getRandomNumber(-20.35, 30.0, true)
+  } else {
+    return getRandomNumber(-90.0, 90.0, true)
+  }
+}
+
+function createRandomIsUp() {
+  const randomNumber = getRandomNumber(0, 10, true)
+
+  if (randomNumber % 2 === 0) {
+    return true
+  } else {
+    return false
+  }
+}
+
 function getRandomNumber(min, max, isInt) {
   if (isInt) {
     return Math.round(Math.random() * (max - min) + min)
@@ -190,4 +236,7 @@ module.exports = {
   createIncreaseStockList,
   createInterestList,
   createRandomPrice,
+  createRandomPercent,
+  createRandomprevPriceRate,
+  createRandomIsUp,
 }

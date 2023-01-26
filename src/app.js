@@ -18,6 +18,9 @@ const {
   createMyStockLists,
   createInterestList,
   createRandomPrice,
+  createRandomPercent,
+  createRandomprevPriceRate,
+  createRandomIsUp,
 } = require('./stocks.js')
 const { Socket } = require('engine.io')
 const { clearInterval } = require('timers')
@@ -72,6 +75,7 @@ sise.on('connection', (socket) => {
   console.log('Client has connected to sise namespace')
   let interval
   let siseInterval
+  let intervals = []
   socket.emit('connectCompletion', 'connected')
   socket.on('disconnect', () => {
     console.log('The client has disconnected')
@@ -80,6 +84,11 @@ sise.on('connection', (socket) => {
     }
     if (siseInterval !== null) {
       clearInterval(siseInterval)
+    }
+    if (intervals.length != 0) {
+      intervals.forEach((interval) => {
+        clearInterval(interval)
+      })
     }
   })
 
@@ -95,14 +104,23 @@ sise.on('connection', (socket) => {
   socket.on('code', (codeName) => {
     console.log(`client request ${codeName}..`)
     socket.emit('service', `${codeName} sise has set!`)
+
     siseInterval = setInterval(() => {
       const currentPrice = createRandomPrice(codeName).toFixed(4)
-      // const percentChange =
+      const percentChange = createRandomPercent(codeName).toFixed(2)
+      const prevPriceRate = createRandomprevPriceRate(codeName).toFixed(2)
+      const isUp = createRandomIsUp()
+      console.log(percentChange, prevPriceRate, isUp)
+
       socket.emit('sise', {
         code: codeName,
         currentPrice: currentPrice,
+        percentChange: percentChange,
+        prevPriceRate: prevPriceRate,
+        isUp: isUp,
       })
     }, 1000)
+    intervals.push(siseInterval)
   })
 })
 
