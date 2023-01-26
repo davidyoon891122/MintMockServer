@@ -16,6 +16,7 @@ const {
   createIncreaseStockList,
   createMyProfit,
   createMyStockLists,
+  createInterestList,
 } = require('./stocks.js')
 const { Socket } = require('engine.io')
 const { clearInterval } = require('timers')
@@ -44,6 +45,11 @@ app.get('/increase-list', (req, res) => {
   res.status(200).json(myIncreaseStocksJSON)
 })
 
+app.get('/interest-list', (req, res) => {
+  const myInterestStocksJSON = createInterestList()
+  res.status(200).json(myInterestStocksJSON)
+})
+
 io.on('connection', (socket) => {
   console.log("a user connected");
   
@@ -65,7 +71,7 @@ sise.on('connection', (socket) => {
   console.log('Client has connected to sise namespace')
   let interval
   let siseInterval
-
+  socket.emit("connectCompletion", "connected")
   socket.on('disconnect', () => {
     console.log('The client has disconnected')
     if (interval !== null) {
@@ -90,7 +96,10 @@ sise.on('connection', (socket) => {
     socket.emit("service", `${codeName} sise has set!`)
     siseInterval = setInterval(() => {
       console.log("sent sise")
-      socket.emit("sise", "10,000")
+      socket.emit("sise", {
+        code: codeName,
+        currentPrice: "10,000"
+      })
     }, 1000)
   })
 })

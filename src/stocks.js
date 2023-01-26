@@ -43,6 +43,10 @@ function createIncreaseStockList(count) {
   return list
 }
 
+function createInterestList() {
+  return getInterestStockList()
+}
+
 function getRandomNumber(min, max, isInt) {
   if (isInt) {
     return Math.round(Math.random() * (max - min) + min)
@@ -106,9 +110,65 @@ function getRandomIncreaseStockJSON() {
   return jsonFormat
 }
 
+function getInterestStockList() {
+  let list = [
+    {
+      stockName: "애플",
+      stockCode: 'AAPL',
+      currentPrice: 142.5300,
+      percentChange: 2.3,
+      prevPriceRate: 1.0,
+      isUp: true,
+    },
+    {
+      stockName: "Tesla",
+      stockCode: 'TSLA',
+      currentPrice: 152.1730,
+      percentChange: 5.73,
+      prevPriceRate: 8.2600,
+      isUp: true,
+    },
+    {
+      stockName: "Amazon",
+      stockCode: 'AMZN',
+      currentPrice: 97.2655,
+      percentChange: 0.96,
+      prevPriceRate: 0.9400,
+      isUp: true,
+    },
+    {
+      stockName: "Microsoft",
+      stockCode: 'MSFL',
+      currentPrice: 241.1000,
+      percentChange: -0.39,
+      prevPriceRate: 1.0900,
+      isUp: false,
+    },
+    {
+      stockName: "Uber",
+      stockCode: 'UBER',
+      currentPrice: 29.9300,
+      percentChange: 0.5,
+      prevPriceRate: 1.0000,
+      isUp: true,
+    },
+    {
+      stockName: "Meta",
+      stockCode: 'META',
+      currentPrice: 141.6000,
+      percentChange: -1.08,
+      prevPriceRate: 1.5400,
+      isUp: false,
+    }
+  ]
+
+  return list
+}
+
 module.exports = {
   createMyStockLists,
   createMyProfit,
   createDividendStockList,
   createIncreaseStockList,
+  createInterestList,
 }
