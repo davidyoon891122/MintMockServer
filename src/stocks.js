@@ -47,6 +47,24 @@ function createInterestList() {
   return getInterestStockList()
 }
 
+function createRandomPrice(code) {
+  if (code === 'Apple') {
+    return getRandomNumber(142.61, 200.0, true)
+  } else if (code === 'Tesla') {
+    return getRandomNumber(154.23, 200.0, true)
+  } else if (code === 'Amazone') {
+    return getRandomNumber(90.0, 200.0, true)
+  } else if (code === 'Microsoft') {
+    return getRandomNumber(241.67, 300.0, true)
+  } else if (code === 'Uber') {
+    return getRandomNumber(30.5, 50.0, true)
+  } else if (code === 'Meta') {
+    return getRandomNumber(142.35, 250.0, true)
+  } else {
+    return getRandomNumber(90.0, 200.0, true)
+  }
+}
+
 function getRandomNumber(min, max, isInt) {
   if (isInt) {
     return Math.round(Math.random() * (max - min) + min)
@@ -113,53 +131,53 @@ function getRandomIncreaseStockJSON() {
 function getInterestStockList() {
   let list = [
     {
-      stockName: "애플",
+      stockName: 'Apple',
       stockCode: 'AAPL',
-      currentPrice: 142.5300,
+      currentPrice: 142.53,
       percentChange: 2.3,
       prevPriceRate: 1.0,
       isUp: true,
     },
     {
-      stockName: "Tesla",
+      stockName: 'Tesla',
       stockCode: 'TSLA',
-      currentPrice: 152.1730,
+      currentPrice: 152.173,
       percentChange: 5.73,
-      prevPriceRate: 8.2600,
+      prevPriceRate: 8.26,
       isUp: true,
     },
     {
-      stockName: "Amazon",
+      stockName: 'Amazon',
       stockCode: 'AMZN',
       currentPrice: 97.2655,
       percentChange: 0.96,
-      prevPriceRate: 0.9400,
+      prevPriceRate: 0.94,
       isUp: true,
     },
     {
-      stockName: "Microsoft",
+      stockName: 'Microsoft',
       stockCode: 'MSFL',
-      currentPrice: 241.1000,
+      currentPrice: 241.1,
       percentChange: -0.39,
-      prevPriceRate: 1.0900,
+      prevPriceRate: 1.09,
       isUp: false,
     },
     {
-      stockName: "Uber",
+      stockName: 'Uber',
       stockCode: 'UBER',
-      currentPrice: 29.9300,
+      currentPrice: 29.93,
       percentChange: 0.5,
-      prevPriceRate: 1.0000,
+      prevPriceRate: 1.0,
       isUp: true,
     },
     {
-      stockName: "Meta",
+      stockName: 'Meta',
       stockCode: 'META',
-      currentPrice: 141.6000,
+      currentPrice: 141.6,
       percentChange: -1.08,
-      prevPriceRate: 1.5400,
+      prevPriceRate: 1.54,
       isUp: false,
-    }
+    },
   ]
 
   return list
@@ -171,4 +189,5 @@ module.exports = {
   createDividendStockList,
   createIncreaseStockList,
   createInterestList,
+  createRandomPrice,
 }

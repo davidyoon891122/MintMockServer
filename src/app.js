@@ -1,15 +1,15 @@
 // @ts-check
 const express = require('express')
 const app = express()
-const cors = require("cors")
-const http = require("http")
+const cors = require('cors')
+const http = require('http')
 app.use(cors())
 
 const server = http.createServer(app)
-const { Server } = require("socket.io")
+const { Server } = require('socket.io')
 const io = new Server(server)
 
-const sise = io.of("/sise")
+const sise = io.of('/sise')
 
 const {
   createDividendStockList,
@@ -17,6 +17,7 @@ const {
   createMyProfit,
   createMyStockLists,
   createInterestList,
+  createRandomPrice,
 } = require('./stocks.js')
 const { Socket } = require('engine.io')
 const { clearInterval } = require('timers')
@@ -51,14 +52,14 @@ app.get('/interest-list', (req, res) => {
 })
 
 io.on('connection', (socket) => {
-  console.log("a user connected");
-  
+  console.log('a user connected')
+
   socket.on('disconnect', (reason) => {
-    console.log("disconnected")
+    console.log('disconnected')
   })
 
   socket.on('message', (message) => {
-    io.emit("message", `messsage from the server: ${message}`)
+    io.emit('message', `messsage from the server: ${message}`)
   })
 
   socket.on('join', (roomName) => {
@@ -71,7 +72,7 @@ sise.on('connection', (socket) => {
   console.log('Client has connected to sise namespace')
   let interval
   let siseInterval
-  socket.emit("connectCompletion", "connected")
+  socket.emit('connectCompletion', 'connected')
   socket.on('disconnect', () => {
     console.log('The client has disconnected')
     if (interval !== null) {
@@ -84,21 +85,22 @@ sise.on('connection', (socket) => {
 
   socket.on('service', (serviceName) => {
     console.log(`client request ${serviceName}..`)
-    socket.emit("service", "This message is from sise server")
+    socket.emit('service', 'This message is from sise server')
     interval = setInterval(() => {
-      console.log("sent sise")
-      socket.emit("sise", "10,000")
+      console.log('sent sise')
+      socket.emit('sise', '10,000')
     }, 1000)
   })
 
   socket.on('code', (codeName) => {
     console.log(`client request ${codeName}..`)
-    socket.emit("service", `${codeName} sise has set!`)
+    socket.emit('service', `${codeName} sise has set!`)
     siseInterval = setInterval(() => {
-      console.log("sent sise")
-      socket.emit("sise", {
+      const currentPrice = createRandomPrice(codeName).toFixed(4)
+      // const percentChange =
+      socket.emit('sise', {
         code: codeName,
-        currentPrice: "10,000"
+        currentPrice: currentPrice,
       })
     }, 1000)
   })
