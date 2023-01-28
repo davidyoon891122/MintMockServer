@@ -1,116 +1,5 @@
 const { stocks, stockImageURL } = require('./stockInfo.js')
 
-function createMyStockLists(count) {
-  let list = []
-  Array.from(Array(count).keys()).forEach((element) => {
-    const randomJSON = getRandomMyStockJSON()
-    list.push(randomJSON)
-  })
-  console.log(list)
-  return list
-}
-
-function createMyProfit() {
-  let list = []
-  let jsonFormat = {
-    userName: '관리자',
-    totalAsset: getRandomNumber(1000, 10000000, true),
-    valueChange: getRandomNumber(0, 10000, true),
-    percentChange: getRandomNumber(0, 300, false),
-    referenceDay: '20220223',
-  }
-
-  list.push(jsonFormat)
-  return list
-}
-
-function createDividendStockList(count) {
-  let list = []
-  Array.from(Array(count).keys()).forEach((element) => {
-    const randomJSON = getRandomDividendStockJSON()
-    list.push(randomJSON)
-  })
-  console.log(list)
-  return list
-}
-
-function createIncreaseStockList(count) {
-  let list = []
-  Array.from(Array(count).keys()).forEach((element) => {
-    const randomJSON = getRandomIncreaseStockJSON()
-    list.push(randomJSON)
-  })
-  return list
-}
-
-function createInterestList() {
-  return getInterestStockList()
-}
-
-function createRandomPrice(code) {
-  if (code === 'Apple') {
-    return getRandomNumber(142.61, 200.0, true)
-  } else if (code === 'Tesla') {
-    return getRandomNumber(154.23, 200.0, true)
-  } else if (code === 'Amazone') {
-    return getRandomNumber(90.0, 200.0, true)
-  } else if (code === 'Microsoft') {
-    return getRandomNumber(241.67, 300.0, true)
-  } else if (code === 'Uber') {
-    return getRandomNumber(30.5, 50.0, true)
-  } else if (code === 'Meta') {
-    return getRandomNumber(142.35, 250.0, true)
-  } else {
-    return getRandomNumber(90.0, 200.0, true)
-  }
-}
-
-function createRandomPercent(code) {
-  if (code === 'Apple') {
-    return getRandomNumber(0.12, 10.0, true)
-  } else if (code === 'Tesla') {
-    return getRandomNumber(10.0, 30.0, true)
-  } else if (code === 'Amazone') {
-    return getRandomNumber(-30.0, 30.0, true)
-  } else if (code === 'Microsoft') {
-    return getRandomNumber(-30.67, 30.0, true)
-  } else if (code === 'Uber') {
-    return getRandomNumber(10.5, 30.0, true)
-  } else if (code === 'Meta') {
-    return getRandomNumber(-20.35, 30.0, true)
-  } else {
-    return getRandomNumber(-90.0, 90.0, true)
-  }
-}
-
-function createRandomprevPriceRate(code) {
-  if (code === 'Apple') {
-    return getRandomNumber(142.61, 200.0, true)
-  } else if (code === 'Tesla') {
-    return getRandomNumber(154.23, 200.0, true)
-  } else if (code === 'Amazone') {
-    return getRandomNumber(90.0, 200.0, true)
-  } else if (code === 'Microsoft') {
-    return getRandomNumber(241.67, 300.0, true)
-  } else if (code === 'Uber') {
-    return getRandomNumber(30.5, 50.0, true)
-  } else if (code === 'Meta') {
-    return getRandomNumber(142.35, 250.0, true)
-  } else {
-    return getRandomNumber(90.0, 200.0, true)
-  }
-}
-
-function createRandomIsUp() {
-  const randomNumber = getRandomNumber(0, 10, true)
-
-  if (randomNumber % 2 === 0) {
-    return true
-  } else {
-    return false
-  }
-}
-
 function getRandomNumber(min, max, isInt) {
   if (isInt) {
     return Math.round(Math.random() * (max - min) + min)
@@ -119,7 +8,7 @@ function getRandomNumber(min, max, isInt) {
 }
 
 function getRandomMyStockJSON() {
-  let jsonFormat = {
+  const jsonFormat = {
     stockName: 'AT&T',
     currentPrice: 2150,
     stockQuantity: 0.075269,
@@ -139,7 +28,7 @@ function getRandomMyStockJSON() {
 }
 
 function getRandomDividendStockJSON() {
-  let jsonFormat = {
+  const jsonFormat = {
     stockName: 'AT&T',
     currentPrice: 2150,
     percentChange: 7.82,
@@ -157,7 +46,7 @@ function getRandomDividendStockJSON() {
 }
 
 function getRandomIncreaseStockJSON() {
-  let jsonFormat = {
+  const jsonFormat = {
     stockName: 'AT&T',
     stockCode: 'AAA',
     percentChange: 4.34,
@@ -175,7 +64,7 @@ function getRandomIncreaseStockJSON() {
 }
 
 function getInterestStockList() {
-  let list = [
+  const list = [
     {
       stockName: 'Apple',
       stockCode: 'AAPL',
@@ -227,6 +116,130 @@ function getInterestStockList() {
   ]
 
   return list
+}
+
+function createMyStockLists(count) {
+  const list = []
+  Array.from(Array(count).keys()).forEach(() => {
+    const randomJSON = getRandomMyStockJSON()
+    list.push(randomJSON)
+  })
+  return list
+}
+
+function createMyProfit() {
+  const list = []
+  const jsonFormat = {
+    userName: '관리자',
+    totalAsset: getRandomNumber(1000, 10000000, true),
+    valueChange: getRandomNumber(0, 10000, true),
+    percentChange: getRandomNumber(0, 300, false),
+    referenceDay: '20220223',
+  }
+
+  list.push(jsonFormat)
+  return list
+}
+
+function createDividendStockList(count) {
+  const list = []
+  Array.from(Array(count).keys()).forEach(() => {
+    const randomJSON = getRandomDividendStockJSON()
+    list.push(randomJSON)
+  })
+
+  return list
+}
+
+function createIncreaseStockList(count) {
+  const list = []
+  Array.from(Array(count).keys()).forEach(() => {
+    const randomJSON = getRandomIncreaseStockJSON()
+    list.push(randomJSON)
+  })
+  return list
+}
+
+function createInterestList() {
+  return getInterestStockList()
+}
+
+function createRandomPrice(code) {
+  if (code === 'Apple') {
+    return getRandomNumber(142.61, 200.0, true)
+  }
+  if (code === 'Tesla') {
+    return getRandomNumber(154.23, 200.0, true)
+  }
+  if (code === 'Amazone') {
+    return getRandomNumber(90.0, 200.0, true)
+  }
+  if (code === 'Microsoft') {
+    return getRandomNumber(241.67, 300.0, true)
+  }
+  if (code === 'Uber') {
+    return getRandomNumber(30.5, 50.0, true)
+  }
+  if (code === 'Meta') {
+    return getRandomNumber(142.35, 250.0, true)
+  }
+  return getRandomNumber(90.0, 200.0, true)
+}
+
+function createRandomPercent(code) {
+  if (code === 'Apple') {
+    return getRandomNumber(0.12, 10.0, true)
+  }
+  if (code === 'Tesla') {
+    return getRandomNumber(10.0, 30.0, true)
+  }
+  if (code === 'Amazone') {
+    return getRandomNumber(-30.0, 30.0, true)
+  }
+  if (code === 'Microsoft') {
+    return getRandomNumber(-30.67, 30.0, true)
+  }
+  if (code === 'Uber') {
+    return getRandomNumber(10.5, 30.0, true)
+  }
+  if (code === 'Meta') {
+    return getRandomNumber(-20.35, 30.0, true)
+  }
+
+  return getRandomNumber(-90.0, 90.0, true)
+}
+
+function createRandomprevPriceRate(code) {
+  if (code === 'Apple') {
+    return getRandomNumber(142.61, 200.0, true)
+  }
+  if (code === 'Tesla') {
+    return getRandomNumber(154.23, 200.0, true)
+  }
+  if (code === 'Amazone') {
+    return getRandomNumber(90.0, 200.0, true)
+  }
+  if (code === 'Microsoft') {
+    return getRandomNumber(241.67, 300.0, true)
+  }
+  if (code === 'Uber') {
+    return getRandomNumber(30.5, 50.0, true)
+  }
+  if (code === 'Meta') {
+    return getRandomNumber(142.35, 250.0, true)
+  }
+
+  return getRandomNumber(90.0, 200.0, true)
+}
+
+function createRandomIsUp() {
+  const randomNumber = getRandomNumber(0, 10, true)
+
+  if (randomNumber % 2 === 0) {
+    return true
+  }
+
+  return false
 }
 
 module.exports = {
