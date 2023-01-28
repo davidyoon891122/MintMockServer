@@ -74,16 +74,12 @@ io.on('connection', (socket) => {
 sise.on('connection', (socket) => {
   console.log('Client has connected to sise namespace')
   let interval
-  let siseInterval
   let intervals = []
   socket.emit('connectCompletion', 'connected')
   socket.on('disconnect', () => {
     console.log('The client has disconnected')
     if (interval !== null) {
       clearInterval(interval)
-    }
-    if (siseInterval !== null) {
-      clearInterval(siseInterval)
     }
     if (intervals.length != 0) {
       intervals.forEach((interval) => {
