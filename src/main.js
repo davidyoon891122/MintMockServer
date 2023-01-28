@@ -1,6 +1,6 @@
 // @ts-check
 
-const server  = require('./app')
+const server = require('./app')
 
 const PORT = process.env.PORT
 

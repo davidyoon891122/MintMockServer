@@ -1,5 +1,6 @@
 // @ts-check
 const express = require('express')
+const yahooFinance = require('yahoo-finance2').default
 const app = express()
 const cors = require('cors')
 const http = require('http')
@@ -51,6 +52,15 @@ app.get('/increase-list', (req, res) => {
 app.get('/interest-list', (req, res) => {
   const myInterestStocksJSON = createInterestList()
   res.status(200).json(myInterestStocksJSON)
+})
+
+app.get('/current-price', async (req, res) => {
+  const results = await yahooFinance.quote('AAPL')
+  const currentPrice = results.regularMarketPrice
+
+  res.status(200).json({
+    currentPrice,
+  })
 })
 
 io.on('connection', (socket) => {
