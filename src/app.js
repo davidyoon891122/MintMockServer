@@ -3,10 +3,9 @@ const express = require('express')
 const yahooFinance = require('yahoo-finance2').default
 const app = express()
 const cors = require('cors')
-const http = require('http')
+const server = require('http').createServer(app)
 app.use(cors())
 
-const server = http.createServer(app)
 const { Server } = require('socket.io')
 const io = new Server(server)
 
@@ -63,6 +62,7 @@ app.get('/current-price', async (req, res) => {
   })
 })
 
+// SocketIO
 io.on('connection', (socket) => {
   console.log('a user connected')
 
@@ -82,15 +82,20 @@ io.on('connection', (socket) => {
 
 sise.on('connection', (socket) => {
   console.log('Client has connected to sise namespace')
+  // @ts-ignore
   let interval
+  // @ts-ignore
   const intervals = []
   socket.emit('connectCompletion', 'connected')
   socket.on('disconnect', () => {
     console.log('The client has disconnected')
+    // @ts-ignore
     if (interval !== null) {
+      // @ts-ignore
       clearInterval(interval)
     }
     if (intervals.length !== 0) {
+      // @ts-ignore
       intervals.forEach((interval) => {
         clearInterval(interval)
       })
