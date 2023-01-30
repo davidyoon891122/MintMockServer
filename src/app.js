@@ -5,6 +5,7 @@ const app = express()
 const cors = require('cors')
 const server = require('http').createServer(app)
 app.use(cors())
+app.use(express.json())
 
 const { Server } = require('socket.io')
 const io = new Server(server)
@@ -23,6 +24,7 @@ const {
   createRandomIsUp,
 } = require('./stocks.js')
 const { clearInterval } = require('timers')
+const { saveInterestList, readInterestList }= require('./dataManager.js')
 
 app.get('/', (req, res) => {
   res.send('Hello')
@@ -52,15 +54,66 @@ app.get('/interest-list', (req, res) => {
   const myInterestStocksJSON = createInterestList()
   res.status(200).json(myInterestStocksJSON)
 })
-
+// Request CurrentPrice
 app.get('/current-price', async (req, res) => {
-  const results = await yahooFinance.quote('AAPL')
+  const code = req.query.code
+  console.log(code)
+  if (code === undefined || code === null || code === "") {
+    res.status(200).json({
+      errorMessage: "Please insert the code name"
+    })
+    return
+  }
+  // @ts-ignore
+  const results = await yahooFinance.quote(code)
+  console.log(results)
+
+  if (results === undefined || results === null || results === "") {
+    res.status(200).json({
+      errorMessage: "There is not matched data"
+    })
+    return
+  }
+
   const currentPrice = results.regularMarketPrice
 
   res.status(200).json({
     currentPrice,
   })
 })
+
+// Request add interestList
+app.post('/add-interest-list', (req, res) => {
+  const body = req.body
+
+  console.log(body)
+
+  saveInterestList("davidyoon", body)
+
+  res.status(200).json({
+    reuslt: [],
+    message: "Success"
+  })
+})
+
+app.get('/interest-list-test',  async (req, res) => {
+  try {
+    console.log(req.query.userID)
+    const list = await readInterestList(req.query.userID)
+    console.log(list)
+    res.status(200).json({
+      result: list,
+      message: "Success"
+    })
+  } catch (err) {
+    if (err) console.log(err)
+    res.status(200).json({
+      result: [],
+      message: "Success"
+    })
+  }
+})
+
 
 // SocketIO
 io.on('connection', (socket) => {
