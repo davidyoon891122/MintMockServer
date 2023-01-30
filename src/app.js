@@ -3,10 +3,10 @@ const express = require('express')
 const yahooFinance = require('yahoo-finance2').default
 const app = express()
 const cors = require('cors')
-const http = require('http')
+const server = require('http').createServer(app)
 app.use(cors())
+app.use(express.json())
 
-const server = http.createServer(app)
 const { Server } = require('socket.io')
 const io = new Server(server)
 
@@ -24,6 +24,7 @@ const {
   createRandomIsUp,
 } = require('./stocks.js')
 const { clearInterval } = require('timers')
+const { saveInterestList, readInterestList }= require('./dataManager.js')
 
 app.get('/', (req, res) => {
   res.send('Hello')
@@ -53,9 +54,27 @@ app.get('/interest-list', (req, res) => {
   const myInterestStocksJSON = createInterestList()
   res.status(200).json(myInterestStocksJSON)
 })
-
+// Request CurrentPrice
 app.get('/current-price', async (req, res) => {
-  const results = await yahooFinance.quote('AAPL')
+  const code = req.query.code
+  console.log(code)
+  if (code === undefined || code === null || code === "") {
+    res.status(200).json({
+      errorMessage: "Please insert the code name"
+    })
+    return
+  }
+  // @ts-ignore
+  const results = await yahooFinance.quote(code)
+  console.log(results)
+
+  if (results === undefined || results === null || results === "") {
+    res.status(200).json({
+      errorMessage: "There is not matched data"
+    })
+    return
+  }
+
   const currentPrice = results.regularMarketPrice
 
   res.status(200).json({
@@ -63,6 +82,40 @@ app.get('/current-price', async (req, res) => {
   })
 })
 
+// Request add interestList
+app.post('/add-interest-list', (req, res) => {
+  const body = req.body
+
+  console.log(body)
+
+  saveInterestList("davidyoon", body)
+
+  res.status(200).json({
+    reuslt: [],
+    message: "Success"
+  })
+})
+
+app.get('/interest-list-test',  async (req, res) => {
+  try {
+    console.log(req.query.userID)
+    const list = await readInterestList(req.query.userID)
+    console.log(list)
+    res.status(200).json({
+      result: list,
+      message: "Success"
+    })
+  } catch (err) {
+    if (err) console.log(err)
+    res.status(200).json({
+      result: [],
+      message: "Success"
+    })
+  }
+})
+
+
+// SocketIO
 io.on('connection', (socket) => {
   console.log('a user connected')
 
@@ -82,15 +135,20 @@ io.on('connection', (socket) => {
 
 sise.on('connection', (socket) => {
   console.log('Client has connected to sise namespace')
+  // @ts-ignore
   let interval
+  // @ts-ignore
   const intervals = []
   socket.emit('connectCompletion', 'connected')
   socket.on('disconnect', () => {
     console.log('The client has disconnected')
+    // @ts-ignore
     if (interval !== null) {
+      // @ts-ignore
       clearInterval(interval)
     }
     if (intervals.length !== 0) {
+      // @ts-ignore
       intervals.forEach((interval) => {
         clearInterval(interval)
       })
