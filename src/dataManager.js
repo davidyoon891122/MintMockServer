@@ -18,7 +18,17 @@ const readInterestList = (userID) => {
   
 }
 
+const readMaster = () => {
+  try {
+    const master = readFileSync('master.json')
+    return JSON.parse(master)
+  } catch (err) {
+    if (err) throw err
+  }
+}
+
 module.exports = {
   saveInterestList,
-  readInterestList
+  readInterestList,
+  readMaster
 }
