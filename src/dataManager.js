@@ -1,4 +1,5 @@
-const { readFile, writeFile, readFileSync } = require("fs")
+const { readFile, writeFile, readFileSync, fstat, existsSync, createReadStream, ReadStream } = require("fs")
+const path = require('path')
 
 
 const saveInterestList = async (userID, list) => {
@@ -18,10 +19,14 @@ const readInterestList = (userID) => {
   
 }
 
-const readMaster = () => {
+const readMaster = async () => {
   try {
-    const master = readFileSync('master.json')
-    return JSON.parse(master)
+    const file = 'master.json'
+    if (existsSync(file)) {
+ 
+      const masterFileStream = await createReadStream(file)
+      return masterFileStream
+    }
   } catch (err) {
     if (err) throw err
   }

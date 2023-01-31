@@ -4,6 +4,9 @@ const yahooFinance = require('yahoo-finance2').default
 const app = express()
 const cors = require('cors')
 const server = require('http').createServer(app)
+const path = require('path')
+const mine = require('mime')
+
 app.use(cors())
 app.use(express.json())
 
@@ -24,6 +27,7 @@ const {
 } = require('./stocks.js')
 const { clearInterval } = require('timers')
 const { saveInterestList, readInterestList, readMaster }= require('./dataManager.js')
+const { fstat } = require('fs')
 
 app.get('/', (req, res) => {
   res.send('Hello')
@@ -109,6 +113,32 @@ app.get('/interest-list-test',  async (req, res) => {
     res.status(200).json({
       result: [],
       message: "Success"
+    })
+  }
+})
+
+app.get('/:master', async (req, res) => {
+  console.log("client request download a master")
+  try {
+    const file = "master.json"
+
+    const filename= path.basename(file)
+    const mineType = mine.getType(file)
+
+    res.setHeader('Content-disposition', 'attachment; filename=' + filename)
+    res.setHeader('Content-type', mineType)
+
+    const filestream = await readMaster()
+
+    if (filestream !== undefined) {
+      filestream.pipe(res)
+    }
+
+  } catch (err) {
+    console.log(err)
+    res.status(200).json({
+      result: "",
+      message: "Failed"
     })
   }
 })
