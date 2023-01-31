@@ -11,8 +11,6 @@ const { Server } = require('socket.io')
 const io = new Server(server)
 
 const sise = io.of('/sise')
-const master = io.of('/master')
-
 const {
   createDividendStockList,
   createIncreaseStockList,
@@ -185,13 +183,6 @@ sise.on('connection', (socket) => {
       })
     }, 1000)
     intervals.push(siseInterval)
-  })
-})
-
-master.on('connection', (socket) => {
-  socket.on("download", (fileName) => {
-    const master = readMaster()
-    socket.emit("download", master)
   })
 })
 
