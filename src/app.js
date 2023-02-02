@@ -26,7 +26,7 @@ const {
   createRandomIsUp,
 } = require('./stocks.js')
 const { clearInterval } = require('timers')
-const { saveInterestList, readInterestList, readMaster }= require('./dataManager.js')
+const { saveInterestList, readInterestList, readMaster, getFileSize }= require('./dataManager.js')
 const { fstat } = require('fs')
 
 app.get('/', (req, res) => {
@@ -117,7 +117,7 @@ app.get('/interest-list-test',  async (req, res) => {
   }
 })
 
-app.get('/:master', async (req, res) => {
+app.get('/master', async (req, res) => {
   console.log("client request download a master")
   try {
     const file = "master.json"
@@ -128,7 +128,39 @@ app.get('/:master', async (req, res) => {
     res.setHeader('Content-disposition', 'attachment; filename=' + filename)
     res.setHeader('Content-type', mineType)
 
-    const filestream = await readMaster()
+    const filestream = await readMaster(file)
+
+    if (filestream !== undefined) {
+      filestream.pipe(res)
+    }
+
+  } catch (err) {
+    console.log(err)
+    res.status(200).json({
+      result: "",
+      message: "Failed"
+    })
+  }
+})
+
+app.get('/bigsize', async (req, res) => {
+  console.log("client request download a bigfile")
+  try {
+    const file = "bigsize.zip"
+
+    const filename= path.basename(file)
+    const mineType = mine.getType(file)
+
+    res.setHeader('Content-disposition', 'attachment; filename=' + filename)
+    res.setHeader('Content-type', mineType)
+    const fileSize = getFileSize(file)
+
+    if (fileSize !== undefined) {
+      console.log(`fileSize: ${fileSize}`)
+      res.setHeader('Content-Length', fileSize)
+    }
+
+    const filestream = await readMaster(file)
 
     if (filestream !== undefined) {
       filestream.pipe(res)
