@@ -9,9 +9,9 @@ const saveInterestList = async (userID, list) => {
   })
 }
 
-const readInterestList = (userID) => {
+const readInterestList = (userId) => {
   try {
-    const list = readFileSync(`${userID}.json`, 'utf-8')
+    const list = readFileSync(`${userId}.json`, 'utf-8')
     return JSON.parse(list)
   } catch (err) {
     if (err) throw err

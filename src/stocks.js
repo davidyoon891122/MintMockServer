@@ -1,3 +1,4 @@
+const { readInterestList } = require('./dataManager.js')
 const { stocks, stockImageURL } = require('./stockInfo.js')
 
 function getRandomNumber(min, max, isInt) {
@@ -63,59 +64,13 @@ function getRandomIncreaseStockJSON() {
   return jsonFormat
 }
 
-function getInterestStockList() {
-  const list = [
-    {
-      stockName: 'Apple',
-      stockCode: 'AAPL',
-      currentPrice: 142.53,
-      percentChange: 2.3,
-      prevPriceRate: 1.0,
-      isUp: true,
-    },
-    {
-      stockName: 'Tesla',
-      stockCode: 'TSLA',
-      currentPrice: 152.173,
-      percentChange: 5.73,
-      prevPriceRate: 8.26,
-      isUp: true,
-    },
-    {
-      stockName: 'Amazon',
-      stockCode: 'AMZN',
-      currentPrice: 97.2655,
-      percentChange: 0.96,
-      prevPriceRate: 0.94,
-      isUp: true,
-    },
-    {
-      stockName: 'Microsoft',
-      stockCode: 'MSFL',
-      currentPrice: 241.1,
-      percentChange: -0.39,
-      prevPriceRate: 1.09,
-      isUp: false,
-    },
-    {
-      stockName: 'Uber',
-      stockCode: 'UBER',
-      currentPrice: 29.93,
-      percentChange: 0.5,
-      prevPriceRate: 1.0,
-      isUp: true,
-    },
-    {
-      stockName: 'Meta',
-      stockCode: 'META',
-      currentPrice: 141.6,
-      percentChange: -1.08,
-      prevPriceRate: 1.54,
-      isUp: false,
-    },
-  ]
-
-  return list
+function getInterestStockList(userId) {
+  try {
+    return readInterestList(userId)
+  } catch (err) {
+    if (err) throw err
+  }
+  
 }
 
 function createMyStockLists(count) {
@@ -158,10 +113,6 @@ function createIncreaseStockList(count) {
     list.push(randomJSON)
   })
   return list
-}
-
-function createInterestList() {
-  return getInterestStockList()
 }
 
 function createRandomPrice(code) {
@@ -247,9 +198,9 @@ module.exports = {
   createMyProfit,
   createDividendStockList,
   createIncreaseStockList,
-  createInterestList,
   createRandomPrice,
   createRandomPercent,
   createRandomprevPriceRate,
   createRandomIsUp,
+  getInterestStockList,
 }

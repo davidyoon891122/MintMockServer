@@ -19,11 +19,11 @@ const {
   createIncreaseStockList,
   createMyProfit,
   createMyStockLists,
-  createInterestList,
   createRandomPrice,
   createRandomPercent,
   createRandomprevPriceRate,
   createRandomIsUp,
+  getInterestStockList,
 } = require('./stocks.js')
 const { clearInterval } = require('timers')
 const { saveInterestList, readInterestList, readMaster, getFileSize }= require('./dataManager.js')
@@ -54,8 +54,29 @@ app.get('/increase-list', (req, res) => {
 })
 
 app.get('/interest-list', (req, res) => {
-  const myInterestStocksJSON = createInterestList()
-  res.status(200).json(myInterestStocksJSON)
+  const userId = req.query.userId
+  console.log(userId)
+
+  if (userId === undefined || userId === "") {
+    res.status(200).json({
+      result: [],
+      message: "Param Input Error"
+    })
+    return
+  }
+  try {
+    const myInterestStocksJSON = getInterestStockList(userId)
+    res.status(200).json(myInterestStocksJSON)
+    return
+  } catch (err) {
+    if (err) {
+      res.status(200).json({
+        result: [],
+        message: "There is not matched data"
+      })
+      return
+    }
+  }
 })
 // Request CurrentPrice
 app.get('/current-price', async (req, res) => {
