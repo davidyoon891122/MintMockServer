@@ -1,6 +1,5 @@
 // @ts-check
 const express = require('express')
-const yahooFinance = require('yahoo-finance2').default
 const app = express()
 const cors = require('cors')
 const server = require('http').createServer(app)
@@ -28,6 +27,7 @@ const {
 const { clearInterval } = require('timers')
 const { saveInterestList, readInterestList, readMaster, getFileSize }= require('./dataManager.js')
 const { fstat } = require('fs')
+const { parseRequestStringToStockCodeList } = require('./requestParser.js')
 
 app.get('/', (req, res) => {
   res.send('Hello')
@@ -80,30 +80,46 @@ app.get('/interest-list', (req, res) => {
 })
 // Request CurrentPrice
 app.get('/current-price', async (req, res) => {
-  const code = req.query.code
-  console.log(code)
-  if (code === undefined || code === null || code === "") {
+  const codes = req.query.codes
+  console.log(codes)
+  if (codes === undefined || codes === null || codes === "") {
     res.status(200).json({
       errorMessage: "Please insert the code name"
     })
     return
   }
-  // @ts-ignore
-  const results = await yahooFinance.quote(code)
-  console.log(results)
 
-  if (results === undefined || results === null || results === "") {
+  try {
+    const result = await parseRequestStringToStockCodeList(codes)
+
     res.status(200).json({
-      errorMessage: "There is not matched data"
+      result,
+      message: "Success"
+    })
+    return
+  } catch (err) {
+    res.status(200).json({
+      result: [],
+      message: "Some error is occured!"
     })
     return
   }
+  // @ts-ignore
+  // const results = await yahooFinance.quote(code)
+  // console.log(results)
 
-  const currentPrice = results.regularMarketPrice
+  // if (results === undefined || results === null || results === "") {
+  //   res.status(200).json({
+  //     errorMessage: "There is not matched data"
+  //   })
+  //   return
+  // }
 
-  res.status(200).json({
-    currentPrice,
-  })
+  // const currentPrice = results.regularMarketPrice
+
+  // res.status(200).json({
+  //   currentPrice,
+  // })
 })
 
 // Request add interestList
