@@ -6,7 +6,7 @@ const {
   addInterestCode,
  } = require('./stocks')
 
-router.get('/interest-list', (req, res) => {
+router.get('/interest-list', async (req, res) => {
   const userId = req.query.userId
   console.log(userId)
 
@@ -18,7 +18,7 @@ router.get('/interest-list', (req, res) => {
     return
   }
   try {
-    const myInterestStocksJSON = getInterestStockList(userId)
+    const myInterestStocksJSON = await getInterestStockList(userId)
     res.status(200).json(myInterestStocksJSON)
     return
   } catch (err) {
@@ -46,13 +46,14 @@ router.post('/add-interest-list', (req, res) => {
   })
 })
 
-router.patch('/add', (req, res) => {
+router.patch('/add', async (req, res) => {
+  console.dir(req.body)
   const userId = req.body.userId
   const code = req.body.code
   console.log(`request add stock ${code} to exist jsonfile ${userId}`)
 
   try {
-    addInterestCode(userId, code)
+    await addInterestCode(userId, code)
     res.status(200).json({
       result: [],
       message: "Update success"

@@ -193,13 +193,14 @@ function createRandomIsUp() {
   return false
 }
 
-const addInterestCode = (userId, code) => {
+const addInterestCode = async (userId, code) => {
   try {
-    const interestList = readInterestList(userId)
+    const interestList = await readInterestList(userId)
+    console.log(`addInterestCode: ${interestList}`)
     interestList.stocks.push({
       "code": code
     })
-    saveInterestList(userId, interestList)
+    await saveInterestList(userId, interestList)
 
   } catch (err) {
     console.log(err)
