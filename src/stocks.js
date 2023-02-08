@@ -1,4 +1,4 @@
-const { readInterestList } = require('./dataManager.js')
+const { readInterestList, saveInterestList } = require('./dataManager.js')
 const { stocks, stockImageURL } = require('./stockInfo.js')
 
 function getRandomNumber(min, max, isInt) {
@@ -193,6 +193,20 @@ function createRandomIsUp() {
   return false
 }
 
+const addInterestCode = (userId, code) => {
+  try {
+    const interestList = readInterestList(userId)
+    interestList.stocks.push({
+      "code": code
+    })
+    saveInterestList(userId, interestList)
+
+  } catch (err) {
+    console.log(err)
+    if (err) throw err
+  }
+}
+
 module.exports = {
   createMyStockLists,
   createMyProfit,
@@ -203,4 +217,5 @@ module.exports = {
   createRandomprevPriceRate,
   createRandomIsUp,
   getInterestStockList,
+  addInterestCode,
 }

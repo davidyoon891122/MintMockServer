@@ -3,8 +3,6 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const server = require('http').createServer(app)
-const path = require('path')
-const mine = require('mime')
 
 app.use(cors())
 app.use(express.json())
@@ -14,204 +12,21 @@ const io = new Server(server)
 
 const sise = io.of('/sise')
 const {
-  createDividendStockList,
-  createIncreaseStockList,
-  createMyProfit,
-  createMyStockLists,
   createRandomPrice,
   createRandomPercent,
   createRandomprevPriceRate,
   createRandomIsUp,
-  getInterestStockList,
 } = require('./stocks.js')
 const { clearInterval } = require('timers')
-const { saveInterestList, readInterestList, readMaster, getFileSize }= require('./dataManager.js')
-const { fstat } = require('fs')
-const { parseRequestStringToStockCodeList } = require('./requestParser.js')
 
-app.get('/', (req, res) => {
-  res.send('Hello')
-})
-
-app.get('/my-stock', (req, res) => {
-  const myStocksJSON = createMyStockLists(5)
-  res.status(200).json(myStocksJSON)
-})
-
-app.get('/my-profit', (req, res) => {
-  const myProfitJSON = createMyProfit()
-  res.status(200).json(myProfitJSON)
-})
-
-app.get('/dividend-list', (req, res) => {
-  const myDividendsJSON = createDividendStockList(10)
-  res.status(200).json(myDividendsJSON)
-})
-
-app.get('/increase-list', (req, res) => {
-  const myIncreaseStocksJSON = createIncreaseStockList(10)
-  res.status(200).json(myIncreaseStocksJSON)
-})
-
-app.get('/interest-list', (req, res) => {
-  const userId = req.query.userId
-  console.log(userId)
-
-  if (userId === undefined || userId === "") {
-    res.status(200).json({
-      result: [],
-      message: "Param Input Error"
-    })
-    return
-  }
-  try {
-    const myInterestStocksJSON = getInterestStockList(userId)
-    res.status(200).json(myInterestStocksJSON)
-    return
-  } catch (err) {
-    if (err) {
-      res.status(200).json({
-        result: [],
-        message: "There is not matched data"
-      })
-      return
-    }
-  }
-})
-// Request CurrentPrice
-app.get('/current-price', async (req, res) => {
-  const codes = req.query.codes
-  console.log(codes)
-  if (codes === undefined || codes === null || codes === "") {
-    res.status(200).json({
-      errorMessage: "Please insert the code name"
-    })
-    return
-  }
-
-  try {
-    const result = await parseRequestStringToStockCodeList(codes)
-
-    res.status(200).json({
-      result,
-      message: "Success"
-    })
-    return
-  } catch (err) {
-    res.status(200).json({
-      result: [],
-      message: "Some error is occured!"
-    })
-    return
-  }
-  // @ts-ignore
-  // const results = await yahooFinance.quote(code)
-  // console.log(results)
-
-  // if (results === undefined || results === null || results === "") {
-  //   res.status(200).json({
-  //     errorMessage: "There is not matched data"
-  //   })
-  //   return
-  // }
-
-  // const currentPrice = results.regularMarketPrice
-
-  // res.status(200).json({
-  //   currentPrice,
-  // })
-})
-
-// Request add interestList
-app.post('/add-interest-list', (req, res) => {
-  const body = req.body
-
-  console.log(body)
-
-  saveInterestList("davidyoon", body)
-
-  res.status(200).json({
-    reuslt: [],
-    message: "Success"
-  })
-})
-
-app.get('/interest-list-test',  async (req, res) => {
-  try {
-    console.log(req.query.userID)
-    const list = await readInterestList(req.query.userID)
-    console.log(list)
-    res.status(200).json({
-      result: list,
-      message: "Success"
-    })
-  } catch (err) {
-    if (err) console.log(err)
-    res.status(200).json({
-      result: [],
-      message: "Success"
-    })
-  }
-})
-
-app.get('/master', async (req, res) => {
-  console.log("client request download a master")
-  try {
-    const file = "master.json"
-
-    const filename= path.basename(file)
-    const mineType = mine.getType(file)
-
-    res.setHeader('Content-disposition', 'attachment; filename=' + filename)
-    res.setHeader('Content-type', mineType)
-
-    const filestream = await readMaster(file)
-
-    if (filestream !== undefined) {
-      filestream.pipe(res)
-    }
-
-  } catch (err) {
-    console.log(err)
-    res.status(200).json({
-      result: "",
-      message: "Failed"
-    })
-  }
-})
-
-app.get('/bigsize', async (req, res) => {
-  console.log("client request download a bigfile")
-  try {
-    const file = "bigsize.zip"
-
-    const filename= path.basename(file)
-    const mineType = mine.getType(file)
-
-    res.setHeader('Content-disposition', 'attachment; filename=' + filename)
-    res.setHeader('Content-type', mineType)
-    const fileSize = getFileSize(file)
-
-    if (fileSize !== undefined) {
-      console.log(`fileSize: ${fileSize}`)
-      res.setHeader('Content-Length', fileSize)
-    }
-
-    const filestream = await readMaster(file)
-
-    if (filestream !== undefined) {
-      filestream.pipe(res)
-    }
-
-  } catch (err) {
-    console.log(err)
-    res.status(200).json({
-      result: "",
-      message: "Failed"
-    })
-  }
-})
-
+const interestRouter = require('./interestApp')
+const miniRouter = require('./miniStockApp')
+const masterRouter = require('./masterApp')
+const stockRouter = require('./stockApp')
+app.use('/interest', interestRouter)
+app.use('/mini', miniRouter)
+app.use('/master', masterRouter)
+app.use('/stock', stockRouter)
 
 // SocketIO
 io.on('connection', (socket) => {
