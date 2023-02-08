@@ -6,7 +6,7 @@ const app = require('../app')
 const request = supertest(app)
 
 test('request my-stock', async () => {
-  const result = await request.get('/my-stock').accept('application/json')
+  const result = await request.get('/mini/my-stock').accept('application/json')
 
   if (result.body.length != 0) {
     expect(result.body[0]).toMatchObject({
@@ -20,7 +20,7 @@ test('request my-stock', async () => {
 })
 
 test('request my-profit', async () => {
-  const result = await request.get('/my-profit').accept('application/json')
+  const result = await request.get('/mini/my-profit').accept('application/json')
   console.log(result.body)
 
   if (result.body.length != 0) {
@@ -35,7 +35,7 @@ test('request my-profit', async () => {
 })
 
 test('request dividend-list', async () => {
-  const reuslt = await request.get('/dividend-list').accept('application/json')
+  const reuslt = await request.get('/mini/dividend-list').accept('application/json')
   console.log(reuslt.body)
   if (reuslt.body.length != 0) {
     expect(reuslt.body[0]).toMatchObject({
@@ -49,7 +49,7 @@ test('request dividend-list', async () => {
 })
 
 test('request increase-list', async () => {
-  const result = await request.get('/increase-list').accept('application/json')
+  const result = await request.get('/mini/increase-list').accept('application/json')
   console.log(result.body)
 
   if (result.body.length != 0) {
