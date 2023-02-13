@@ -4,6 +4,7 @@ const {
   saveInterestList,
   readInterestList,
   addInterestCode,
+  removeInterestCode,
  } = require('./stocks')
 
 router.get('/interest-list', async (req, res) => {
@@ -12,7 +13,7 @@ router.get('/interest-list', async (req, res) => {
 
   if (userId === undefined || userId === "") {
     res.status(200).json({
-      result: [],
+      stocks: [],
       message: "Param Input Error"
     })
     return
@@ -24,7 +25,7 @@ router.get('/interest-list', async (req, res) => {
   } catch (err) {
     if (err) {
       res.status(200).json({
-        result: [],
+        stocks: [],
         message: "There is not matched data"
       })
       return
@@ -66,11 +67,26 @@ router.patch('/add', async (req, res) => {
       message: "Failed to add code to list"
     })
   }
-  
+})
 
-
-  
-
+router.patch('/delete', async (req, res) => {
+  console.dir(req.body)
+  const userId = req.body.userId
+  const code = req.body.code
+  console.log(`request delete stock ${code} to exist jsonfile ${userId}`)
+  try {
+    await removeInterestCode(userId, code)
+    res.status(200).json({
+      result: [],
+      message: "Delete Success"
+    })
+  } catch (err) {
+    if (err) 
+    res.status(200).json({
+      result: [],
+      message: "Failed to delete code from list"
+    })
+  }
 })
 
 module.exports = router

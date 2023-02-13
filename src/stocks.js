@@ -197,15 +197,64 @@ const addInterestCode = async (userId, code) => {
   try {
     const interestList = await readInterestList(userId)
     console.log(`addInterestCode: ${interestList}`)
-    interestList.stocks.push({
-      "code": code
-    })
-    await saveInterestList(userId, interestList)
+    const isExist = await isExistCode(interestList, code)
+    console.log(isExist)
+    if(isExist) {
+      console.log(`${code} is already registered`)
+      return 
+    } else {
+      interestList.stocks.push({
+        "code": code
+      })
+      await saveInterestList(userId, interestList)
+    }
+  } catch (err) {
+    console.log(err)
+    if (err) throw err
+  }
+}
+
+const removeInterestCode = async (userId, code) => {
+  try {
+    const interestList = await readInterestList(userId)
+    console.log(`deleteInterestCode: ${interestList}`)
+    const isExist = await isExistCode(interestList, code)
+
+    if (isExist) {
+      removeByCode(interestList.stocks, code)
+      console.log(interestList.stocks)
+      await saveInterestList(userId, interestList)
+    } else {
+      console.log("Not exist code")
+      return 
+    }
 
   } catch (err) {
     console.log(err)
     if (err) throw err
   }
+}
+
+
+function isExistCode(interestList, code) {
+  let result = false
+  console.log(interestList.stocks)
+  for(let i=0; i<interestList.stocks.length; i++) {
+    console.log(interestList.stocks[i].code)
+    if(interestList.stocks[i].code === code) {
+      result = true
+    }
+  }
+
+  return result
+}
+
+function removeByCode(interestList, code) {
+  const selectedCodeIndex = interestList.findIndex(element => {
+    return element.code === code
+  })
+
+  return !!interestList.splice(selectedCodeIndex, 1)
 }
 
 module.exports = {
@@ -219,4 +268,5 @@ module.exports = {
   createRandomIsUp,
   getInterestStockList,
   addInterestCode,
+  removeInterestCode,
 }
