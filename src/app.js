@@ -52,7 +52,9 @@ sise.on('connection', (socket) => {
   let interval
   // @ts-ignore
   const intervals = []
+  let count = 0
   socket.emit('connectCompletion', 'connected')
+
   socket.on('disconnect', () => {
     console.log('The client has disconnected')
     // @ts-ignore
@@ -65,6 +67,8 @@ sise.on('connection', (socket) => {
       intervals.forEach((interval) => {
         clearInterval(interval)
       })
+      intervals.length = 0
+      console.log(`invervals: ${intervals.length}`)
     }
   })
 
@@ -78,6 +82,7 @@ sise.on('connection', (socket) => {
   })
 
   socket.on('code', (codeName) => {
+    count += 1 
     console.log(`client request ${codeName}..`)
     socket.emit('service', `${codeName} sise has set!`)
 
@@ -97,6 +102,8 @@ sise.on('connection', (socket) => {
       })
     }, 1000)
     intervals.push(siseInterval)
+    console.log(`Current sise count with count variable: ${count}`)
+    console.log(`Current sise count: ${intervals.length}`)
   })
 })
 
