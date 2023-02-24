@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { parseRequestStringToStockCodeList } = require('./requestParser.js')
+const { requestQuote, requestInsights } = require('./requestYahooAPI.js')
 
 // Request CurrentPrice
 router.get('/current-price', async (req, res) => {
@@ -13,7 +13,7 @@ router.get('/current-price', async (req, res) => {
   }
 
   try {
-    const result = await parseRequestStringToStockCodeList(codes)
+    const result = await requestQuote(codes)
 
     res.status(200).json({
       result,
@@ -27,6 +27,24 @@ router.get('/current-price', async (req, res) => {
     })
     return
   }
+})
+
+
+router.get('/insights', async (req, res) => {
+  const code = req.query.code
+  if (code === undefined || code === "") {
+    res.status(200).json({
+      message: "Please write the code to search insights"
+    })
+    return
+  }
+
+  const result = await requestInsights(code)
+  
+  res.status(200).json({
+    result,
+    message: "Test Success"
+  })
 })
 
 module.exports = router

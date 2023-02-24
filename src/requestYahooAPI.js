@@ -1,6 +1,6 @@
 const yahooFinance = require("yahoo-finance2").default
 
-const parseRequestStringToStockCodeList = async (param) => {
+const requestQuote = async (param) => {
   try {
     const codes = param.split('|')
     console.log(codes)
@@ -11,6 +11,16 @@ const parseRequestStringToStockCodeList = async (param) => {
   }
 }
 
+const requestInsights = async (param) => {
+  try {
+    const result = await yahooFinance.insights(param)
+    return result
+  } catch (err) {
+    if (err) throw err
+  }
+}
+
 module.exports = {
-  parseRequestStringToStockCodeList
+  requestQuote,
+  requestInsights
 }
