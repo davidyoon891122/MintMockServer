@@ -43,9 +43,20 @@ const getFileSize = (fileName) => {
   }
 }
 
+const writeMaster = async (data) => {
+  try {
+    await writeFile(`master.json`, JSON.stringify(data), (err) => {
+      if (err) throw err
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 module.exports = {
   saveInterestList,
   readInterestList,
   readMaster,
-  getFileSize
+  getFileSize,
+  writeMaster
 }
