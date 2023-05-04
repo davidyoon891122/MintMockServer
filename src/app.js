@@ -81,7 +81,7 @@ sise.on('connection', (socket) => {
     }, 1000)
   })
 
-  socket.on('code', (codeName) => {
+  socket.on('code', async (codeName) => {
     count += 1 
     console.log(`client request ${codeName}..`)
     socket.emit('service', `${codeName} sise has set!`)
@@ -100,7 +100,7 @@ sise.on('connection', (socket) => {
         prevPriceRate,
         isUp,
       })
-    }, 1000)
+    }, Math.floor(Math.random() * (5000 - 1000) + 1000))
     intervals.push(siseInterval)
     console.log(`Current sise count with count variable: ${count}`)
     console.log(`Current sise count: ${intervals.length}`)
