@@ -8,6 +8,7 @@ app.use(cors())
 app.use(express.json())
 
 const { Server } = require('socket.io')
+
 const io = new Server(server)
 
 const sise = io.of('/sise')
@@ -17,12 +18,14 @@ const {
   createRandomprevPriceRate,
   createRandomIsUp,
 } = require('./stocks.js')
+
 const { clearInterval } = require('timers')
 
 const interestRouter = require('./interestApp')
 const miniRouter = require('./miniStockApp')
 const masterRouter = require('./masterApp')
 const stockRouter = require('./stockApp')
+
 app.use('/interest', interestRouter)
 app.use('/mini', miniRouter)
 app.use('/master', masterRouter)
@@ -82,7 +85,7 @@ sise.on('connection', (socket) => {
   })
 
   socket.on('code', async (codeName) => {
-    count += 1 
+    count += 1
     console.log(`client request ${codeName}..`)
     socket.emit('service', `${codeName} sise has set!`)
 
